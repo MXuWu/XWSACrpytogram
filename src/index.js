@@ -2,11 +2,16 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
+// Define the base App component, Game
+// Controls choosing of phrase and passes to Cipher
 class Game extends React.Component {
    constructor(){
       super();
-      this.state = {cipher: "Test cipher"};
+      this.state = {
+         phrase: "Test phrase".toUpperCase()
+      };
    }
+
    render(){
       return (
          <div>
@@ -14,7 +19,7 @@ class Game extends React.Component {
                <h1> XWSA Cryptogram Game </h1>
             </div>
             <div className="game">
-               <Cipher cipher={this.state.cipher}/>
+               <Cipher phrase={this.state.phrase} name="hello"/>
             
             </div>
          </div>
@@ -23,12 +28,67 @@ class Game extends React.Component {
 }
 
 class Cipher extends React.Component{
-   // constructor(props){
-   //    super(props);
-   // }
+   constructor(props){
+      super(props);
+      this.state = {
+         phrase: this.props.phrase,
+         // hash map of substitution cipher
+         cipher:  new Map(),
+      };
+   }
+
+   generateSubCipher(){
+      // is there a better way to generate the alphabet?
+      const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+      let alph2 = alphabet;
+      const cipher = this.state.cipher;
+      for(const letter in alphabet){
+         cipher.set(letter, '');
+         // this.setState({
+         //    cipher: this.state.cipher.set(letter, ''),
+         // });
+      }
+      cipher.set('test', 'hello');
+      console.log(cipher.get('test'));
+
+      for(let i = 0; i <= 26; i++){
+         const subInd = Math.floor((Math.random() * alph2.length));
+         console.log('subInd = ' + subInd);
+         console.log('alphabet: ' + alphabet[i]);
+         console.log('alph2 ' + alph2[subInd]);
+         cipher.set(alphabet[i], alph2[subInd]);
+         // });
+         console.log('cipher get', cipher.get(alphabet[i]));
+         alph2[subInd] = null;
+         alph2 = alph2.join('');
+         console.log('alph2 join', alph2);
+         alph2 = alph2.split('');
+      }
+
+      // this.setState({
+      //    cipher: cipher,
+      // });
+   }
+   
+   renderCipher(){
+      return (
+         <div> 
+         why won't this work  
+         {this.state.cipher['a']}
+         </div>
+      );
+   }
+
    render(){
       return(
-         <h2> {this.props.cipher} </h2>
+         <div>
+         {this.generateSubCipher()}
+         <h2> {this.state.phrase} </h2>
+         <div>
+            {this.renderCipher()}
+            {this.props.name}
+         </div>
+         </div>
       );
    }
 }
