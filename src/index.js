@@ -11,37 +11,12 @@ class Game extends React.Component {
          phrase: "Test phrase".toUpperCase()
       };
    }
-
-   render(){
-      return (
-         <div>
-            <div id="gameHeader">
-               <h1> XWSA Cryptogram Game </h1>
-            </div>
-            <div className="game">
-               <Cipher phrase={this.state.phrase} name="hello"/>
-            
-            </div>
-         </div>
-      );
-   }
-}
-
-class Cipher extends React.Component{
-   constructor(props){
-      super(props);
-      this.state = {
-         phrase: this.props.phrase,
-         // hash map of substitution cipher
-         cipher:  new Map(),
-      };
-   }
-
+   
    generateSubCipher(){
+      const cipher = new Map();
       // is there a better way to generate the alphabet?
       const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
       let alph2 = alphabet;
-      const cipher = this.state.cipher;
       for(const letter in alphabet){
          cipher.set(letter, '');
          // this.setState({
@@ -64,10 +39,32 @@ class Cipher extends React.Component{
          console.log('alph2 join', alph2);
          alph2 = alph2.split('');
       }
+      return cipher;
+   }
 
-      // this.setState({
-      //    cipher: cipher,
-      // });
+   render(){
+      return (
+         <div>
+            <div id="gameHeader">
+               <h1> XWSA Cryptogram Game </h1>
+            </div>
+            <div className="game">
+               <Cipher phrase={this.state.phrase} cipher={this.generateSubCipher()}/>
+            
+            </div>
+         </div>
+      );
+   }
+}
+
+class Cipher extends React.Component{
+   constructor(props){
+      super(props);
+      this.state = {
+         phrase: this.props.phrase.split(),
+         // hash map of substitution cipher
+         cipher: this.props.cipher,
+      };
    }
    
    renderCipher(){
@@ -82,7 +79,6 @@ class Cipher extends React.Component{
    render(){
       return(
          <div>
-         {this.generateSubCipher()}
          <h2> {this.state.phrase} </h2>
          <div>
             {this.renderCipher()}
