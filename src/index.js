@@ -17,16 +17,7 @@ class Game extends React.Component {
       // is there a better way to generate the alphabet?
       const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
       let alph2 = alphabet;
-      for(const letter in alphabet){
-         cipher.set(letter, '');
-         // this.setState({
-         //    cipher: this.state.cipher.set(letter, ''),
-         // });
-      }
-      cipher.set('test', 'hello');
-      console.log(cipher.get('test'));
-
-      for(let i = 0; i <= 26; i++){
+      for(let i = 0; i < 26; i++){
          const subInd = Math.floor((Math.random() * alph2.length));
          console.log('subInd = ' + subInd);
          console.log('alphabet: ' + alphabet[i]);
@@ -66,13 +57,10 @@ class Cipher extends React.Component{
          cipher: this.props.cipher,
       };
    }
-   
-   renderCipher(){
+
+   renderTile(){
       return (
-         <div> 
-         why won't this work  
-         {this.state.cipher['a']}
-         </div>
+         <Tile />
       );
    }
 
@@ -81,24 +69,25 @@ class Cipher extends React.Component{
          <div>
          <h2> {this.state.phrase} </h2>
          <div>
-            {this.renderCipher()}
-            {this.props.name}
+            {/* {this.props.name} */}
+            <Tile />
          </div>
          </div>
       );
    }
 }
 
-
+// Tile component represents a single letter within the game
 class Tile extends React.Component {
    constructor(props){
       super(props);
       this.state = {
          encrypted: true,
+         // plainLetter: this.props.plainLetter,
+         // subLetter: this.props.subLetter,
       };
    }
 }
-
 
 ReactDOM.render(
    <Game />,
