@@ -4,6 +4,7 @@ import './index.css';
 
 // Define the base App component, Game
 // Controls choosing of phrase and passes to Cipher
+//    also includes generation of substitution cipher
 class Game extends React.Component {
    constructor(){
       super();
@@ -12,22 +13,24 @@ class Game extends React.Component {
       };
    }
    
+   // generates 
    generateSubCipher(){
       const cipher = new Map();
       // is there a better way to generate the alphabet?
       const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
       let alph2 = alphabet;
       for(let i = 0; i < 26; i++){
+         // choose a random index from remaining letters
          const subInd = Math.floor((Math.random() * alph2.length));
-         console.log('subInd = ' + subInd);
-         console.log('alphabet: ' + alphabet[i]);
-         console.log('alph2 ' + alph2[subInd]);
+         // console.log('subInd = ' + subInd);
+         // console.log('alphabet: ' + alphabet[i]);
+         // console.log('alph2 ' + alph2[subInd]);
+         // map letter to cipher letter
          cipher.set(alphabet[i], alph2[subInd]);
-         // });
-         console.log('cipher get', cipher.get(alphabet[i]));
+         // console.log('cipher get', cipher.get(alphabet[i]));
          alph2[subInd] = null;
          alph2 = alph2.join('');
-         console.log('alph2 join', alph2);
+         // console.log('alph2 join', alph2);
          alph2 = alph2.split('');
       }
       return cipher;
@@ -41,7 +44,6 @@ class Game extends React.Component {
             </div>
             <div className="game">
                <Cipher phrase={this.state.phrase} cipher={this.generateSubCipher()}/>
-            
             </div>
          </div>
       );
@@ -52,26 +54,35 @@ class Cipher extends React.Component{
    constructor(props){
       super(props);
       this.state = {
-         phrase: this.props.phrase.split(),
+         // change phrase into array of characters
+         phrase: this.props.phrase.split(''),
          // hash map of substitution cipher
          cipher: this.props.cipher,
       };
    }
 
-   renderTile(){
-      return (
-         <Tile />
+   renderTile(phraseLetter, index){
+      console.log("phraseLetter:" + phraseLetter);
+      console.log("cipher letter:" + this.state.cipher.get(phraseLetter));
+      let tileLetter = " ";
+      if (phraseLetter !== " "){
+         tileLetter = this.state.cipher.get(phraseLetter);
+      }
+      return(
+         // give each tile a key for 'stable identity'
+         <Tile class='tile' key={index} phraseLetter={phraseLetter} cipherLetter={tileLetter}/>
       );
    }
 
    render(){
+      // need to bind "this" to component "this"
+      const tileList = [];
+       this.state.phrase.map((letter, index) => {
+          return tileList.push(this.renderTile(letter, index));
+       });
       return(
          <div>
-         <h2> {this.state.phrase} </h2>
-         <div>
-            {/* {this.props.name} */}
-            <Tile />
-         </div>
+         {tileList}
          </div>
       );
    }
@@ -83,9 +94,16 @@ class Tile extends React.Component {
       super(props);
       this.state = {
          encrypted: true,
-         // plainLetter: this.props.plainLetter,
-         // subLetter: this.props.subLetter,
+         plainLetter: this.props.plainLetter,
+         cipherLetter: this.props.cipherLetter,
       };
+   }
+   render(){
+      return(
+         // <div className='Tile'>
+         <span className='Tile'>{this.state.cipherLetter}</span>
+         // </div>
+      );
    }
 }
 

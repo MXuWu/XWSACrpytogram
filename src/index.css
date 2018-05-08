@@ -7,4 +7,13 @@ body {
 #gameHeader{
   text-align: center;
 }
- 
+
+.game{
+  align-content: left;
+  text-align: left;
+}
+
+.Tile{
+  font-size: 50px;
+  font-weight: bold;
+}
