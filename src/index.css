@@ -1,7 +1,7 @@
 body {
   font: 14px "Century Gothic", Futura, sans-serif;
   margin: 20px;
-  background-color: gainsboro;
+  background-color: rgb(#dddddd);
 } 
 
 #gameHeader{
@@ -9,11 +9,25 @@ body {
 }
 
 .game{
-  align-content: left;
-  text-align: left;
+  text-align: center;
+  align-content: center;
+  margin: 50px;
+  border: 50px;
+  height: 800px;
 }
 
 .Tile{
-  font-size: 50px;
+  font-size: 40px;
   font-weight: bold;
+  float: left;
+}
+.char{
+  margin: 5px;
+}
+.space{
+   margin: 13px;
+}
+
+.cipherBox{
+  margin: 10px;
 }

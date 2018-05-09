@@ -9,7 +9,7 @@ class Game extends React.Component {
    constructor(){
       super();
       this.state = {
-         phrase: "Test phrase".toUpperCase()
+         phrase: "hello this is the Test phrase".toUpperCase()
       };
    }
    
@@ -43,7 +43,8 @@ class Game extends React.Component {
                <h1> XWSA Cryptogram Game </h1>
             </div>
             <div className="game">
-               <Cipher phrase={this.state.phrase} cipher={this.generateSubCipher()}/>
+               <Cipher phrase={this.state.phrase} 
+               cipher={this.generateSubCipher()}/>
             </div>
          </div>
       );
@@ -58,6 +59,7 @@ class Cipher extends React.Component{
          phrase: this.props.phrase.split(''),
          // hash map of substitution cipher
          cipher: this.props.cipher,
+         userGuess: new Map(),
       };
    }
 
@@ -70,8 +72,12 @@ class Cipher extends React.Component{
       }
       return(
          // give each tile a key for 'stable identity'
-         <Tile class='tile' key={index} phraseLetter={phraseLetter} cipherLetter={tileLetter}/>
+         <Tile className='tile' key={index} phraseLetter={phraseLetter} cipherLetter={tileLetter} userGuess={this.state.userGuess} onKeyDown={this.handleKeyPress}/>
       );
+   }
+
+   handleKeyPress(event){
+      console.log("handleKeypress: " + event);
    }
 
    render(){
@@ -81,7 +87,7 @@ class Cipher extends React.Component{
           return tileList.push(this.renderTile(letter, index));
        });
       return(
-         <div>
+         <div className="row">
          {tileList}
          </div>
       );
@@ -94,14 +100,33 @@ class Tile extends React.Component {
       super(props);
       this.state = {
          encrypted: true,
-         plainLetter: this.props.plainLetter,
+         plainLetter: this.props.phraseLetter,
          cipherLetter: this.props.cipherLetter,
       };
    }
+
    render(){
       return(
          // <div className='Tile'>
-         <span className='Tile'>{this.state.cipherLetter}</span>
+         <span className='Tile'>
+            {this.state.plainLetter === " " ? 
+               <div className="space"></div> 
+               :
+               <div className="char" onKeyPress={this.props.handleKeyPress}>
+               _
+               <div>
+               {this.state.cipherLetter}
+               </div>
+               </div>
+            }
+         {/* <form >
+            <label>
+               <input className="cipherBox" type="text" name="subLetter" pattern="[A-Za-z]{1}" onKeyDown={this.props.handleKeyPress} />
+               {this.state.cipherLetter}
+            </label>
+            <input type="submit" value="try"/>
+         </form> */}
+         </span>
          // </div>
       );
    }
