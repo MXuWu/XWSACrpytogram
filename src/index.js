@@ -64,15 +64,18 @@ class Cipher extends React.Component{
          // hash map of substitution cipher
          cipher: this.props.cipher,
          userGuess: new Map(),
-         letterSelected: new Map(),
+         letterSelected: "",
       };
    }
 
    handleClick(letter){
-      const letterSelected = this.state.letterSelected;
-      if(this.letterSelected){
-         letterSelected.set(letter, true);
+      let letterSelected = this.state.letterSelected;
+      if(letter !== " "){
+         letterSelected = letter;
       }
+      this.setState({
+         letterSelected: letterSelected,
+      });
    }
 
    renderTile(phraseLetter, index){
@@ -85,12 +88,12 @@ class Cipher extends React.Component{
 
       const tileClass = classNames({
          Tile: true,
-         active: this.state.letterSelected.get(phraseLetter),
-      })
+         active: phraseLetter === this.state.letterSelected,
+      });
 
       return(
          // give each tile a key for 'stable identity'
-         <Tile className={tileClass} key={index} phraseLetter={phraseLetter} cipherLetter={tileLetter} userGuess={this.state.userGuess} onClick={()=> this.handleClick(phraseLetter)} onKeyDown={this.handleKeyPress}/>
+         <Tile className={tileClass} key={index} phraseLetter={phraseLetter} cipherLetter={tileLetter} userGuess={this.state.userGuess} onClick={()=> this.handleClick(phraseLetter)}/>
       );
    }
 
@@ -126,24 +129,17 @@ class Tile extends React.Component {
    render(){
       return(
          // <div className='Tile'>
-         <div className='Tile'>
+         <div className={this.props.className} onClick={()=> this.props.onClick(this.state.cipherLetter)}>
             {this.state.plainLetter === " " ? 
-               <div className="space"></div> 
+               <div className="space">{'\u00b7'}</div> 
                :
-               <div className="char" onKeyPress={this.props.handleKeyPress}>
+               <div className="char">
                _
                <div className="char">
                {this.state.cipherLetter}
                </div>
                </div>
             }
-         {/* <form >
-            <label>
-               <input className="cipherBox" type="text" name="subLetter" pattern="[A-Za-z]{1}" onKeyDown={this.props.handleKeyPress} />
-               {this.state.cipherLetter}
-            </label>
-            <input type="submit" value="try"/>
-         </form> */}
          </div>
          // </div>
       );
