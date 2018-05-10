@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
+// classNames utility to make naming classes more readable
+import classNames from 'classnames';
 
 // Define the base App component, Game
 // Controls choosing of phrase and passes to Cipher
@@ -18,12 +20,14 @@ class Game extends React.Component {
       const cipher = new Map();
       // is there a better way to generate the alphabet?
       const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
-      let alph2 = alphabet;
+      // werid behaviour if you don't use slice
+      let alph2 = alphabet.slice();
       for(let i = 0; i < 26; i++){
          // choose a random index from remaining letters
-         const subInd = Math.floor((Math.random() * alph2.length));
+         const subInd = Math.floor((Math.random() * (alph2.length - 1)));
          // console.log('subInd = ' + subInd);
-         // console.log('alphabet: ' + alphabet[i]);
+         // console.log('alphabet: ' + alphabet.join('') + i);
+         // console.log('alphabet[i]: ' + alphabet[i]);
          // console.log('alph2 ' + alph2[subInd]);
          // map letter to cipher letter
          cipher.set(alphabet[i], alph2[subInd]);
@@ -60,7 +64,15 @@ class Cipher extends React.Component{
          // hash map of substitution cipher
          cipher: this.props.cipher,
          userGuess: new Map(),
+         letterSelected: new Map(),
       };
+   }
+
+   handleClick(letter){
+      const letterSelected = this.state.letterSelected;
+      if(this.letterSelected){
+         letterSelected.set(letter, true);
+      }
    }
 
    renderTile(phraseLetter, index){
@@ -70,9 +82,15 @@ class Cipher extends React.Component{
       if (phraseLetter !== " "){
          tileLetter = this.state.cipher.get(phraseLetter);
       }
+
+      const tileClass = classNames({
+         Tile: true,
+         active: this.state.letterSelected.get(phraseLetter),
+      })
+
       return(
          // give each tile a key for 'stable identity'
-         <Tile className='tile' key={index} phraseLetter={phraseLetter} cipherLetter={tileLetter} userGuess={this.state.userGuess} onKeyDown={this.handleKeyPress}/>
+         <Tile className={tileClass} key={index} phraseLetter={phraseLetter} cipherLetter={tileLetter} userGuess={this.state.userGuess} onClick={()=> this.handleClick(phraseLetter)} onKeyDown={this.handleKeyPress}/>
       );
    }
 
@@ -108,13 +126,13 @@ class Tile extends React.Component {
    render(){
       return(
          // <div className='Tile'>
-         <span className='Tile'>
+         <div className='Tile'>
             {this.state.plainLetter === " " ? 
                <div className="space"></div> 
                :
                <div className="char" onKeyPress={this.props.handleKeyPress}>
                _
-               <div>
+               <div className="char">
                {this.state.cipherLetter}
                </div>
                </div>
@@ -126,7 +144,7 @@ class Tile extends React.Component {
             </label>
             <input type="submit" value="try"/>
          </form> */}
-         </span>
+         </div>
          // </div>
       );
    }

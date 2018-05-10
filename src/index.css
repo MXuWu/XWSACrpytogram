@@ -4,28 +4,40 @@ body {
   background-color: rgb(#dddddd);
 } 
 
+span {
+  margin: 2px;
+}
+
 #gameHeader{
   text-align: center;
 }
 
 .game{
   text-align: center;
-  align-content: center;
   margin: 50px;
   border: 50px;
   height: 800px;
 }
 
+.row{
+  height: 800px;
+  align-content: center;
+  vertical-align: top;
+}
+
 .Tile{
+  text-align: center;
   font-size: 40px;
-  font-weight: bold;
-  float: left;
+  display: inline-block;
+  width: 40px;
+
 }
 .char{
-  margin: 5px;
+  margin: 3px;
 }
 .space{
-   margin: 13px;
+  height: 110px;
+  width:  40px;
 }
 
 .cipherBox{
