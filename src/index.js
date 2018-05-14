@@ -71,21 +71,26 @@ class Cipher extends React.Component{
    handleClick(letter){
       let letterSelected = this.state.letterSelected;
       if(letter !== " "){
-         letterSelected = letter;
+         letterSelected = (letterSelected === letter) ? "" : letter;
       }
       this.setState({
          letterSelected: letterSelected,
       });
    }
 
+   handleKeyPress(event){
+      console.log("keypress: " + event);
+   }
+
    renderTile(phraseLetter, index){
-      console.log("phraseLetter:" + phraseLetter);
-      console.log("cipher letter:" + this.state.cipher.get(phraseLetter));
+      // console.log("phraseLetter:" + phraseLetter);
+      // console.log("cipher letter:" + this.state.cipher.get(phraseLetter));
       let tileLetter = " ";
       if (phraseLetter !== " "){
          tileLetter = this.state.cipher.get(phraseLetter);
       }
 
+      // create class "Tile", with conditional "active" class
       const tileClass = classNames({
          Tile: true,
          active: phraseLetter === this.state.letterSelected,
@@ -93,12 +98,12 @@ class Cipher extends React.Component{
 
       return(
          // give each tile a key for 'stable identity'
-         <Tile className={tileClass} key={index} phraseLetter={phraseLetter} cipherLetter={tileLetter} userGuess={this.state.userGuess} onClick={()=> this.handleClick(phraseLetter)}/>
+         //  pass map of userGuesses (do i need to do this???)
+         //  pass onClick handler for user selection, use arrow function syntax
+         //   to bind "this" (could also use bind())
+         //
+         <Tile className={tileClass} key={index} phraseLetter={phraseLetter} cipherLetter={tileLetter} userGuess={this.state.userGuess} onClick={()=> this.handleClick(phraseLetter)} onKeyPress={this.handleKeyPress}/>
       );
-   }
-
-   handleKeyPress(event){
-      console.log("handleKeypress: " + event);
    }
 
    render(){
@@ -129,7 +134,7 @@ class Tile extends React.Component {
    render(){
       return(
          // <div className='Tile'>
-         <div className={this.props.className} onClick={()=> this.props.onClick(this.state.cipherLetter)}>
+         <div className={this.props.className} onClick={()=> this.props.onClick(this.state.cipherLetter)} onKeyPress={this.props.onKeyPress}>
             {this.state.plainLetter === " " ? 
                <div className="space">{'\u00b7'}</div> 
                :
