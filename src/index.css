@@ -27,14 +27,12 @@ span {
 
 .Tile{
   text-align: center;
-  vertical-align: center;
   font-size: 40px;
   display: inline-block;
   width: 36px;
 }
 .char{
   text-align: center;
-  /* margin: 5px; */
   width: 36px;
 }
 

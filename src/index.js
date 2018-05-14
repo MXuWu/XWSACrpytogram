@@ -63,10 +63,21 @@ class Cipher extends React.Component{
          phrase: this.props.phrase.split(''),
          // hash map of substitution cipher
          cipher: this.props.cipher,
-         userGuess: new Map(),
          letterSelected: "",
+         userGuess: new Map(),
       };
+      this.handleKeyPress = this.handleKeyPress.bind(this);
    }
+   
+   // componentDidMount(){
+   //    const userGuess = new Map();
+   //    const phrase = this.state.phrase.join('').trim().split('');
+   //    for (let i = 0; i < phrase.length; i++){
+   //       userGuess.set(phrase[i], "");
+   //       console.log("userGuess added letter: " + userGuess.get(phrase[i]));
+   //    }
+   //    this.setState({userGuess: userGuess});
+   // }
 
    handleClick(letter){
       let letterSelected = this.state.letterSelected;
@@ -79,7 +90,12 @@ class Cipher extends React.Component{
    }
 
    handleKeyPress(event){
-      console.log("keypress: " + event);
+      const userGuess = this.state.userGuess;
+      const letterSelected = this.state.letterSelected;
+      console.log("keypress: " + event.key);
+      userGuess.set(letterSelected, event.key.toUpperCase());
+      console.log("userguess for letter " + letterSelected + " is " + event.key);
+      this.setState({userGuess: userGuess});
    }
 
    renderTile(phraseLetter, index){
@@ -101,8 +117,15 @@ class Cipher extends React.Component{
          //  pass map of userGuesses (do i need to do this???)
          //  pass onClick handler for user selection, use arrow function syntax
          //   to bind "this" (could also use bind())
-         //
-         <Tile className={tileClass} key={index} phraseLetter={phraseLetter} cipherLetter={tileLetter} userGuess={this.state.userGuess} onClick={()=> this.handleClick(phraseLetter)} onKeyPress={this.handleKeyPress}/>
+         <Tile 
+         className={tileClass} 
+         key={index} 
+         phraseLetter={phraseLetter} 
+         cipherLetter={tileLetter} 
+         userGuess={this.state.userGuess.get(phraseLetter)} 
+         onClick={() => this.handleClick(phraseLetter)} 
+         onKeyPress={this.handleKeyPress}
+         />
       );
    }
 
@@ -128,17 +151,22 @@ class Tile extends React.Component {
          encrypted: true,
          plainLetter: this.props.phraseLetter,
          cipherLetter: this.props.cipherLetter,
+         userGuess: this.props.userGuess,
       };
    }
 
    render(){
       return(
          // <div className='Tile'>
-         <div className={this.props.className} onClick={()=> this.props.onClick(this.state.cipherLetter)} onKeyPress={this.props.onKeyPress}>
-            {this.state.plainLetter === " " ? 
+         <div className={this.props.className} onClick={() => this.props.onClick(this.state.cipherLetter)} onKeyPress={this.props.onKeyPress} tabIndex="0">
+            {this.state.plainLetter === " " ?
                <div className="space">{'\u00b7'}</div> 
                :
                <div className="char">
+               <div className="char">
+               {this.props.userGuess}
+               {/* {this.state.userGuess.get(this.state.cipherLetter)} */}
+               </div>
                _
                <div className="char">
                {this.state.cipherLetter}
