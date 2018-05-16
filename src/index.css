@@ -31,21 +31,27 @@ span {
   display: inline-block;
   width: 36px;
 }
+
+.active{
+  font-weight: bold;
+}
+
 .char{
   text-align: center;
   width: 36px;
 }
 
-.active{
-  font-weight: bold;
+.guess{
+  font-size: 30px;
+}
+
+.cipher{
+  margin-top: 10px;
+  color: rgb(102, 101, 101);
 }
 
 .space{
   font-size: 25px;
   color: rgb(146, 146, 146);
   text-align: center;
-}
-
-.cipherBox{
-  margin: 10px;
 }

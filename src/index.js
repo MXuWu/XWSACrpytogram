@@ -69,15 +69,15 @@ class Cipher extends React.Component{
       this.handleKeyPress = this.handleKeyPress.bind(this);
    }
    
-   // componentDidMount(){
-   //    const userGuess = new Map();
-   //    const phrase = this.state.phrase.join('').trim().split('');
-   //    for (let i = 0; i < phrase.length; i++){
-   //       userGuess.set(phrase[i], "");
-   //       console.log("userGuess added letter: " + userGuess.get(phrase[i]));
-   //    }
-   //    this.setState({userGuess: userGuess});
-   // }
+   componentDidMount(){
+      const userGuess = new Map();
+      const phrase = this.state.phrase.join('').trim().split('');
+      for (let i = 0; i < phrase.length; i++){
+         userGuess.set(phrase[i], "_");
+         console.log("userGuess added letter: " + userGuess.get(phrase[i]));
+      }
+      this.setState({userGuess: userGuess});
+   }
 
    handleClick(letter){
       let letterSelected = this.state.letterSelected;
@@ -162,13 +162,11 @@ class Tile extends React.Component {
             {this.state.plainLetter === " " ?
                <div className="space">{'\u00b7'}</div> 
                :
-               <div className="char">
-               <div className="char">
+               <div className="cipherPair">
+               <div className="char guess">
                {this.props.userGuess}
-               {/* {this.state.userGuess.get(this.state.cipherLetter)} */}
                </div>
-               _
-               <div className="char">
+               <div className="char cipher">
                {this.state.cipherLetter}
                </div>
                </div>
