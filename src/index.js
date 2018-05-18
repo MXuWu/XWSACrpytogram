@@ -11,7 +11,7 @@ class Game extends React.Component {
    constructor(){
       super();
       this.state = {
-         phrase: "hello this is the Test phrase".toUpperCase()
+         phrases: ["hello this is the Test phrase"],
       };
    }
    
@@ -24,7 +24,7 @@ class Game extends React.Component {
       let alph2 = alphabet.slice();
       for(let i = 0; i < 26; i++){
          // choose a random index from remaining letters
-         const subInd = Math.floor((Math.random() * (alph2.length - 1)));
+         const subInd = Math.floor((Math.random() * (alph2.length)));
          // console.log('subInd = ' + subInd);
          // console.log('alphabet: ' + alphabet.join('') + i);
          // console.log('alphabet[i]: ' + alphabet[i]);
@@ -41,13 +41,14 @@ class Game extends React.Component {
    }
 
    render(){
+      let phraseInd = Math.floor((Math.random() * (this.state.phrases.length)));
       return (
          <div>
             <div id="gameHeader">
                <h1> XWSA Cryptogram Game </h1>
             </div>
             <div className="game">
-               <Cipher phrase={this.state.phrase} 
+               <Cipher phrase={this.state.phrases[phraseInd].toUpperCase()} 
                cipher={this.generateSubCipher()}/>
             </div>
          </div>
@@ -136,8 +137,19 @@ class Cipher extends React.Component{
           return tileList.push(this.renderTile(letter, index));
        });
       return(
+         <div>
          <div className="row">
-         {tileList}
+            {tileList}
+         </div>
+         <div className="panel">
+            <button className="btn btn-clear" onClick={this.handleClear}> 
+            Clear 
+            </button>
+            <button className="btn btn-hint">
+            Hint
+            </button>
+
+         </div>
          </div>
       );
    }
