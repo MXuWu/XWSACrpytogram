@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom';
 import './index.css';
 // classNames utility to make naming classes more readable
 import classNames from 'classnames';
+// react-bootstrap for Panel functionality
+import Panel from 'react-bootstrap/lib/Panel';
 
 // Define the base App component, Game
 // Controls choosing of phrase and passes to Cipher
@@ -11,7 +13,7 @@ class Game extends React.Component {
    constructor(){
       super();
       this.state = {
-         phrases: ["hello this is the Test phrase"],
+         phrases: ["hello this is the Test phrase", "hope you enjoyed solving my something awesome"],
       };
    }
    
@@ -41,7 +43,7 @@ class Game extends React.Component {
    }
 
    render(){
-      let phraseInd = Math.floor((Math.random() * (this.state.phrases.length)));
+      const phraseInd = Math.floor((Math.random()*(this.state.phrases.length)));
       return (
          <div>
             <div id="gameHeader">
@@ -66,8 +68,10 @@ class Cipher extends React.Component{
          cipher: this.props.cipher,
          letterSelected: "",
          userGuess: new Map(),
+         hint: 0,
       };
       this.handleKeyPress = this.handleKeyPress.bind(this);
+      this.handleClear = this.handleClear.bind(this);
    }
    
    componentDidMount(){
@@ -96,6 +100,16 @@ class Cipher extends React.Component{
       console.log("keypress: " + event.key);
       userGuess.set(letterSelected, event.key.toUpperCase());
       console.log("userguess for letter " + letterSelected + " is " + event.key);
+      this.setState({userGuess: userGuess});
+   }
+
+   // Handles clear button action
+   handleClear(){
+      const userGuess = this.state.userGuess;
+      // iterate through all key/value pair of userGuess map
+      userGuess.forEach((v, k) => {
+         userGuess.set(k, "_");
+      });
       this.setState({userGuess: userGuess});
    }
 
@@ -138,18 +152,53 @@ class Cipher extends React.Component{
        });
       return(
          <div>
-         <div className="row">
-            {tileList}
-         </div>
-         <div className="panel">
-            <button className="btn btn-clear" onClick={this.handleClear}> 
-            Clear 
-            </button>
-            <button className="btn btn-hint">
-            Hint
-            </button>
+            <div className="row">
+               {tileList}
+            </div>
 
-         </div>
+            <div className="panel-game-btns">
+               <button className="btn btn-clear" onClick={this.handleClear}>  Clear 
+               </button>
+            </div>
+            <div className="hints">
+               {/* react-bootstrap component */}
+               <div className="hint">
+               <Panel>
+                  <Panel.Heading>
+                     <Panel.Title toggle>Hint</Panel.Title>
+                  </Panel.Heading>
+                  <Panel.Collapse>
+                     <Panel.Body>
+                     The most common letters in the alphabet are 'E' 'T' 'A' 'O' 'I' 'N'
+                     </Panel.Body>
+                  </Panel.Collapse>
+               </Panel>
+               </div>
+               <div className="hint">
+               <Panel>
+                  <Panel.Heading>
+                     <Panel.Title toggle>Hint</Panel.Title>
+                  </Panel.Heading>
+                  <Panel.Collapse>
+                     <Panel.Body>
+                     The most common digraphs in English are 'TH' 'HE' 'IN' 'ER'
+                     </Panel.Body>
+                  </Panel.Collapse>
+               </Panel>
+               </div>
+               <div className="hint">
+               <Panel>
+                  <Panel.Heading>
+                     <Panel.Title toggle>Hint</Panel.Title>
+                  </Panel.Heading>
+                  <Panel.Collapse>
+                     <Panel.Body>
+                        This is a hint 
+                     </Panel.Body>
+                  </Panel.Collapse>
+               </Panel>
+               </div>
+            </div>
          </div>
       );
    }
