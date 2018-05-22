@@ -24,7 +24,7 @@ span {
   align-content: left;
   vertical-align: top;
   border-color: rgb(102, 101, 101);
-  margin-bottom: 50px;
+  margin-bottom: 20px;
 }
 
 .Tile{
@@ -69,7 +69,6 @@ span {
   margin-bottom: 20px;
 }
 
-
 .hint{
   display: inline-block;
   vertical-align: top;
@@ -84,4 +83,13 @@ span {
   color:white;
   background-color: rgb(100, 180, 100);
   border-color: #ddd;
+}
+
+.hidden{
+  display: none;
+}
+
+.win{
+  font-size: 72px;
+  color: pink;
 }

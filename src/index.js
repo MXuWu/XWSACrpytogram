@@ -13,7 +13,8 @@ class Game extends React.Component {
    constructor(){
       super();
       this.state = {
-         phrases: ["hello this is the Test phrase", "hope you enjoyed solving my something awesome"],
+         phrases: ["hello this is the Test phrase", "I hope you enjoyed solving my something awesome", "security engineering is a lot of fun", "i really loved blogging"],
+         win: false,
       };
    }
    
@@ -69,9 +70,12 @@ class Cipher extends React.Component{
          letterSelected: "",
          userGuess: new Map(),
          hint: 0,
+         win: false,
       };
       this.handleKeyPress = this.handleKeyPress.bind(this);
       this.handleClear = this.handleClear.bind(this);
+      this.handleKeydown = this.handleKeydown.bind(this);
+      this.checkWin = this.checkWin.bind(this);
    }
    
    componentDidMount(){
@@ -97,10 +101,19 @@ class Cipher extends React.Component{
    handleKeyPress(event){
       const userGuess = this.state.userGuess;
       const letterSelected = this.state.letterSelected;
-      console.log("keypress: " + event.key);
+      // console.log("keypress: " + event.key);
       userGuess.set(letterSelected, event.key.toUpperCase());
       console.log("userguess for letter " + letterSelected + " is " + event.key);
       this.setState({userGuess: userGuess});
+   }
+
+   handleKeydown(event){
+      const userGuess = this.state.userGuess;
+      const letterSelected = this.state.letterSelected;  
+      if(event.key === "Backspace"){
+         userGuess.set(letterSelected, '_');
+         this.setState({userGuess: userGuess});
+      }
    }
 
    // Handles clear button action
@@ -113,6 +126,40 @@ class Cipher extends React.Component{
       this.setState({userGuess: userGuess});
    }
 
+   getKeyByValue(map, value){
+      map.forEach((v, k) => {
+         console.log("foreach k: " + k, v);
+         if(value === k){
+            console.log("value === v");
+            return k;
+         }
+      });
+   }
+
+   checkWin(){
+      const userGuess = this.state.userGuess;
+      const phrase = this.state.phrase.slice();
+      const cipher = this.state.cipher;
+      let win = true;
+      userGuess.forEach((v,k)=>{
+         if (k !== " "){
+            if (v !== k){
+               win = false;
+            }
+         }
+      });
+      if(win){
+         this.setState({win: win});
+         // console.log("YOU WIN");
+      }
+   }
+
+   componentDidUpdate(){
+      console.log("UPDATE");
+      if(this.state.win !== true){
+         this.checkWin();
+      };
+   }
    renderTile(phraseLetter, index){
       // console.log("phraseLetter:" + phraseLetter);
       // console.log("cipher letter:" + this.state.cipher.get(phraseLetter));
@@ -140,6 +187,7 @@ class Cipher extends React.Component{
          userGuess={this.state.userGuess.get(phraseLetter)} 
          onClick={() => this.handleClick(phraseLetter)} 
          onKeyPress={this.handleKeyPress}
+         onKeyDown={this.handleKeydown}
          />
       );
    }
@@ -150,14 +198,22 @@ class Cipher extends React.Component{
        this.state.phrase.map((letter, index) => {
           return tileList.push(this.renderTile(letter, index));
        });
+       const winClass = classNames({
+          win: "win",
+          hidden: this.state.win ? false : true,
+       });
       return(
          <div>
             <div className="row">
                {tileList}
             </div>
-
+            <div className={winClass}>
+            You Win!
+            </div>
             <div className="panel-game-btns">
                <button className="btn btn-clear" onClick={this.handleClear}>  Clear 
+               </button>
+               <button className="btn btn-newGame" onClick={this.handleClear}>  New Game 
                </button>
             </div>
             <div className="hints">
@@ -219,7 +275,7 @@ class Tile extends React.Component {
    render(){
       return(
          // <div className='Tile'>
-         <div className={this.props.className} onClick={() => this.props.onClick(this.state.cipherLetter)} onKeyPress={this.props.onKeyPress} tabIndex="0">
+         <div className={this.props.className} onClick={() => this.props.onClick(this.state.cipherLetter)} onKeyPress={this.props.onKeyPress} onKeyDown={this.props.onKeyDown} tabIndex="0">
             {this.state.plainLetter === " " ?
                <div className="space">{'\u00b7'}</div> 
                :
