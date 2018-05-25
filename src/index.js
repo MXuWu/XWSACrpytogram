@@ -13,20 +13,13 @@ class Game extends React.Component {
    constructor(){
       super();
       this.state = {
-         phrases: ["hello this is the Test phrase", "I hope you enjoyed solving my something awesome", "security engineering is a lot of fun", "i really loved blogging"],
+         phrases: ["hello this is the Test phrase", "I hope you enjoyed solving my something awesome", "security engineering is a lot of fun", "i really loved blogging", 'Dont cry because its over smile because it happened', 'Be the change that you wish to see in the world'],
          win: false,
-         phraseInd: Math.floor((Math.random()*(4))),
-         // phraseInd: 0,
+         phraseInd: Math.floor((Math.random()*(6))),
       };
       this.startNewGame = this.startNewGame.bind(this);
    }
 
-   // componentDidMount(){
-   //    const phraseInd = Math.floor((Math.random()*(this.state.phrases.length)));
-   //    // this.startNewGame();
-   //    console.log(this.state.phraseInd);
-   //    this.setState({phraseInd: phraseInd});
-   // }
 
    startNewGame(){
       // const prevPhraseInd = this.state.phraseInd;
