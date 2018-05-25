@@ -280,7 +280,7 @@ class Cipher extends React.Component{
                   </Panel.Heading>
                   <Panel.Collapse>
                      <Panel.Body>
-                     The most common letters in the alphabet are 'E' 'T' 'A' 'O' 'I' 'N'
+                     Consider the most common letters in regular English
                      </Panel.Body>
                   </Panel.Collapse>
                </Panel>
@@ -292,7 +292,7 @@ class Cipher extends React.Component{
                   </Panel.Heading>
                   <Panel.Collapse>
                      <Panel.Body>
-                     The most common digraphs in English are 'TH' 'HE' 'IN' 'ER'
+                     A single letter only has two possibilities!
                      </Panel.Body>
                   </Panel.Collapse>
                </Panel>
@@ -304,7 +304,19 @@ class Cipher extends React.Component{
                   </Panel.Heading>
                   <Panel.Collapse>
                      <Panel.Body>
-                        This is a hint 
+                        The most common digraphs in English are 'TH' 'ER' 'ON' 'AN'
+                     </Panel.Body>
+                  </Panel.Collapse>
+               </Panel>
+               </div>
+               <div className="hint">
+               <Panel>
+                  <Panel.Heading>
+                     <Panel.Title toggle>Hint</Panel.Title>
+                  </Panel.Heading>
+                  <Panel.Collapse>
+                     <Panel.Body>
+                        This is a hint
                      </Panel.Body>
                   </Panel.Collapse>
                </Panel>
