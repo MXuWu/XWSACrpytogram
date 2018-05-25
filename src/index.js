@@ -29,7 +29,6 @@ class Game extends React.Component {
             }
             return {phraseInd};
       });
-      console.log("startnewgame: ");
    }
 
    // generates 
@@ -93,7 +92,6 @@ class Cipher extends React.Component{
       const phrase = this.props.phrase.trim().split('');
       for (let i = 0; i < phrase.length; i++){
          userGuess.set(phrase[i], "_");
-         console.log("userGuess added letter: " + userGuess.get(phrase[i]));
       }
       this.setState(
          {
@@ -105,10 +103,8 @@ class Cipher extends React.Component{
    componentWillReceiveProps(){
       const userGuess = new Map();
       const phrase = this.props.phrase.trim().split('');
-      console.log("COMPONENTWILLRECEIVEPROPS: " + phrase);
       for (let i = 0; i < phrase.length; i++){
          userGuess.set(phrase[i], "_");
-         console.log("userGuess added letter: " + userGuess.get(phrase[i]));
       }
       this.setState(
          {
@@ -134,9 +130,7 @@ class Cipher extends React.Component{
    handleKeyPress(event){
       const userGuess = this.state.userGuess;
       const letterSelected = this.state.letterSelected;
-      // console.log("keypress: " + event.key);
       userGuess.set(letterSelected, event.key.toUpperCase());
-      console.log("userguess for letter " + letterSelected + " is " + event.key);
       this.setState({userGuess: userGuess});
    }
 
@@ -161,9 +155,7 @@ class Cipher extends React.Component{
 
    getKeyByValue(map, value){
       map.forEach((v, k) => {
-         console.log("foreach k: " + k, v);
          if(value === k){
-            console.log("value === v");
             return k;
          }
       });
@@ -185,15 +177,12 @@ class Cipher extends React.Component{
    }
 
    componentDidUpdate(){
-      console.log("UPDATE");
       if(this.state.win !== true){
          this.checkWin();
       };
    }
 
    renderTile(phraseLetter, index){
-      // console.log("phraseLetter:" + phraseLetter);
-      // console.log("cipher letter:" + this.state.cipher.get(phraseLetter));
       let tileLetter = " ";
       if (phraseLetter !== " "){
          tileLetter = this.state.cipher.get(phraseLetter);
