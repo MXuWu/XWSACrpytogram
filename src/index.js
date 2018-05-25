@@ -15,9 +15,35 @@ class Game extends React.Component {
       this.state = {
          phrases: ["hello this is the Test phrase", "I hope you enjoyed solving my something awesome", "security engineering is a lot of fun", "i really loved blogging"],
          win: false,
+         phraseInd: Math.floor((Math.random()*(4))),
+         // phraseInd: 0,
       };
+      this.startNewGame = this.startNewGame.bind(this);
    }
-   
+
+   // componentDidMount(){
+   //    const phraseInd = Math.floor((Math.random()*(this.state.phrases.length)));
+   //    // this.startNewGame();
+   //    console.log(this.state.phraseInd);
+   //    this.setState({phraseInd: phraseInd});
+   // }
+
+   startNewGame(){
+      // const prevPhraseInd = this.state.phraseInd;
+      // while (phraseInd === this.state.phraseInd){
+         // }
+         // this.setState({phraseInd: phraseInd});
+         // choosePhrase();
+         this.setState((prevState)=>{
+            let phraseInd = Math.floor((Math.random()*(this.state.phrases.length)));
+            while(prevState.phraseInd === phraseInd){
+               phraseInd = Math.floor((Math.random()*(this.state.phrases.length)));
+            }
+            return {phraseInd};
+      });
+      console.log("startnewgame: ");
+   }
+
    // generates 
    generateSubCipher(){
       const cipher = new Map();
@@ -44,17 +70,19 @@ class Game extends React.Component {
    }
 
    render(){
-      const phraseInd = Math.floor((Math.random()*(this.state.phrases.length)));
+      const phraseInd = this.state.phraseInd;
       return (
-         <div>
-            <div id="gameHeader">
-               <h1> XWSA Cryptogram Game </h1>
-            </div>
-            <div className="game">
-               <Cipher phrase={this.state.phrases[phraseInd].toUpperCase()} 
-               cipher={this.generateSubCipher()}/>
-            </div>
+      <div>
+         <div id="gameHeader">
+            <h1> XWSA Cryptogram Game </h1>
          </div>
+         <div className="game">
+            <Cipher phrase={this.state.phrases[phraseInd].toUpperCase()}
+            cipher={this.generateSubCipher()}
+            startNewGame={this.startNewGame}
+            />
+         </div>
+      </div>
       );
    }
 }
@@ -69,7 +97,7 @@ class Cipher extends React.Component{
          cipher: this.props.cipher,
          letterSelected: "",
          userGuess: new Map(),
-         hint: 0,
+         // hint: 0,
          win: false,
       };
       this.handleKeyPress = this.handleKeyPress.bind(this);
@@ -77,16 +105,45 @@ class Cipher extends React.Component{
       this.handleKeydown = this.handleKeydown.bind(this);
       this.checkWin = this.checkWin.bind(this);
    }
-   
+
    componentDidMount(){
       const userGuess = new Map();
-      const phrase = this.state.phrase.join('').trim().split('');
+      const phrase = this.props.phrase.trim().split('');
       for (let i = 0; i < phrase.length; i++){
          userGuess.set(phrase[i], "_");
          console.log("userGuess added letter: " + userGuess.get(phrase[i]));
       }
-      this.setState({userGuess: userGuess});
+      this.setState(
+         {
+   //       phrase: this.props.phrase.split(''), 
+   //       cipher: this.props.cipher,
+         userGuess: userGuess,
+         }
+      );
    }
+
+   componentWillReceiveProps(){
+      const userGuess = new Map();
+      const phrase = this.props.phrase.trim().split('');
+      console.log("COMPONENTWILLRECEIVEPROPS: " + phrase);
+      for (let i = 0; i < phrase.length; i++){
+         userGuess.set(phrase[i], "_");
+         console.log("userGuess added letter: " + userGuess.get(phrase[i]));
+      }
+      this.setState(
+         {
+         phrase: this.props.phrase.split(''), 
+         cipher: this.props.cipher,
+         userGuess: userGuess,
+         win: false,
+         letterSelected: "",
+         }
+      );
+   }
+   // componentDidMount(){
+
+   //    this.setState({userGuess: userGuess});
+   // }
 
    handleClick(letter){
       let letterSelected = this.state.letterSelected;
@@ -138,8 +195,6 @@ class Cipher extends React.Component{
 
    checkWin(){
       const userGuess = this.state.userGuess;
-      const phrase = this.state.phrase.slice();
-      const cipher = this.state.cipher;
       let win = true;
       userGuess.forEach((v,k)=>{
          if (k !== " "){
@@ -150,7 +205,6 @@ class Cipher extends React.Component{
       });
       if(win){
          this.setState({win: win});
-         // console.log("YOU WIN");
       }
    }
 
@@ -160,6 +214,7 @@ class Cipher extends React.Component{
          this.checkWin();
       };
    }
+
    renderTile(phraseLetter, index){
       // console.log("phraseLetter:" + phraseLetter);
       // console.log("cipher letter:" + this.state.cipher.get(phraseLetter));
@@ -213,7 +268,7 @@ class Cipher extends React.Component{
             <div className="panel-game-btns">
                <button className="btn btn-clear" onClick={this.handleClear}>  Clear 
                </button>
-               <button className="btn btn-newGame" onClick={this.handleClear}>  New Game 
+               <button className="btn btn-newGame" onClick={this.props.startNewGame}>  New Game 
                </button>
             </div>
             <div className="hints">
@@ -265,11 +320,19 @@ class Tile extends React.Component {
    constructor(props){
       super(props);
       this.state = {
-         encrypted: true,
+         // encrypted: true,
          plainLetter: this.props.phraseLetter,
          cipherLetter: this.props.cipherLetter,
          userGuess: this.props.userGuess,
       };
+   }
+
+   componentWillReceiveProps(){
+      this.setState({
+         plainLetter: this.props.phraseLetter,
+         cipherLetter: this.props.cipherLetter,
+         userGuess: this.props.userGuess,
+      });
    }
 
    render(){
