@@ -22,11 +22,6 @@ class Game extends React.Component {
 
 
    startNewGame(){
-      // const prevPhraseInd = this.state.phraseInd;
-      // while (phraseInd === this.state.phraseInd){
-         // }
-         // this.setState({phraseInd: phraseInd});
-         // choosePhrase();
          this.setState((prevState)=>{
             let phraseInd = Math.floor((Math.random()*(this.state.phrases.length)));
             while(prevState.phraseInd === phraseInd){
@@ -47,16 +42,10 @@ class Game extends React.Component {
       for(let i = 0; i < 26; i++){
          // choose a random index from remaining letters
          const subInd = Math.floor((Math.random() * (alph2.length)));
-         // console.log('subInd = ' + subInd);
-         // console.log('alphabet: ' + alphabet.join('') + i);
-         // console.log('alphabet[i]: ' + alphabet[i]);
-         // console.log('alph2 ' + alph2[subInd]);
          // map letter to cipher letter
          cipher.set(alphabet[i], alph2[subInd]);
-         // console.log('cipher get', cipher.get(alphabet[i]));
          alph2[subInd] = null;
          alph2 = alph2.join('');
-         // console.log('alph2 join', alph2);
          alph2 = alph2.split('');
       }
       return cipher;
@@ -108,8 +97,6 @@ class Cipher extends React.Component{
       }
       this.setState(
          {
-   //       phrase: this.props.phrase.split(''), 
-   //       cipher: this.props.cipher,
          userGuess: userGuess,
          }
       );
@@ -133,10 +120,6 @@ class Cipher extends React.Component{
          }
       );
    }
-   // componentDidMount(){
-
-   //    this.setState({userGuess: userGuess});
-   // }
 
    handleClick(letter){
       let letterSelected = this.state.letterSelected;
